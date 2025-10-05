@@ -1,10 +1,19 @@
-import "./App.css";
+import "./css/App.css";
+import TodoList from "./components/TodoList";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+const theme = createTheme({
+  typography: {
+    fontFamily: ["Alexandria"],
+  },
+});
 function App() {
   return (
-    <div className="App">
-      <h1>kasjdh akjsd</h1>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App" style={{}}>
+        <TodoList />
+      </div>
+    </ThemeProvider>
   );
 }
 
