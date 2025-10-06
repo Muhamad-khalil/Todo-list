@@ -12,35 +12,45 @@ import Button from "@mui/material/Button";
 
 // Components
 import Todo from "./Todo";
-
-//other
+// other
 import { v4 as uuidv4 } from "uuid";
-
-const Todos = [
+import { useState } from "react";
+const initialTodos = [
   {
     id: uuidv4(),
-    title: "قرأه كتاب",
-    details: "سيبه سخيهاسهيبهساتيب تنسيخهعب",
+    title: "اهلا وسهلا بك",
+    details: "اهلا وسهلا بك في مشروعي الخاص",
     isCompleted: false,
   },
   {
     id: uuidv4(),
-    title: "بسم الله",
-    details: "سيح الله قول سبحان الله ",
+    title: "اهلا وسهلا بك",
+    details: "اهلا وسهلا بك في مشروعي الخاص",
     isCompleted: false,
   },
   {
     id: uuidv4(),
-    title: "اهلا بكم",
-    details: "عزيزي المشاهد اهلا بك في الاكاديمه العربي",
+    title: "اهلا وسهلا بك",
+    details: "اهلا وسهلا بك في  الخاص",
     isCompleted: false,
   },
 ];
 export default function TodoList() {
-  const TodoJSX = Todos.map((t) => {
-    return <Todo title={t.title} details={t.details} key={t.id}/>;
+  const [todos, setTodos] = useState(initialTodos); // todoLists
+  const [titleInput, setTitleInput] = useState(""); // TextField Input
+  const todoJSX = todos.map((t) => {
+    return <Todo title={t.title} details={t.details} key={t.id} />;
   });
-
+  function handleAddClick() {
+    const newTodo = {
+      id: uuidv4(),
+      title: titleInput,
+      details: "",
+      isCompleted: false,
+    };
+    setTodos([...todos, newTodo]);
+    setTitleInput("");
+  }
   return (
     <Container maxWidth="sm">
       <Card sx={{ minWidth: 275, textAlign: "center" }}>
@@ -73,7 +83,7 @@ export default function TodoList() {
           </ToggleButtonGroup>
           {/*=== ToggleButton  ===*/}
           {/* All Todos  */}
-          {TodoJSX}
+          {todoJSX}
           {/*=== All Todos  ===*/}
 
           {/* Input + Add Text */}
@@ -89,6 +99,10 @@ export default function TodoList() {
                 id="outlined-basic"
                 label="عنوان المهمه"
                 variant="outlined"
+                value={titleInput}
+                onChange={(e) => {
+                  setTitleInput(e.target.value);
+                }}
               />
             </Grid>
             <Grid
@@ -101,6 +115,9 @@ export default function TodoList() {
                 className="addButton"
                 style={{ width: "100%", height: "100%" }}
                 variant="contained"
+                onClick={() => {
+                  handleAddClick();
+                }}
               >
                 اضافه
               </Button>
