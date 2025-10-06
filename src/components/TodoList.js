@@ -13,12 +13,33 @@ import Button from "@mui/material/Button";
 // Components
 import Todo from "./Todo";
 
-export default function TodoList() {
-  const [alignment, setAlignment] = React.useState("left");
+//other
+import { v4 as uuidv4 } from "uuid";
 
-  const handleAlignment = (event, newAlignment) => {
-    setAlignment(newAlignment);
-  };
+const Todos = [
+  {
+    id: uuidv4(),
+    title: "قرأه كتاب",
+    details: "سيبه سخيهاسهيبهساتيب تنسيخهعب",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "بسم الله",
+    details: "سيح الله قول سبحان الله ",
+    isCompleted: false,
+  },
+  {
+    id: uuidv4(),
+    title: "اهلا بكم",
+    details: "عزيزي المشاهد اهلا بك في الاكاديمه العربي",
+    isCompleted: false,
+  },
+];
+export default function TodoList() {
+  const TodoJSX = Todos.map((t) => {
+    return <Todo title={t.title} details={t.details} key={t.id}/>;
+  });
 
   return (
     <Container maxWidth="sm">
@@ -52,7 +73,7 @@ export default function TodoList() {
           </ToggleButtonGroup>
           {/*=== ToggleButton  ===*/}
           {/* All Todos  */}
-          <Todo />
+          {TodoJSX}
           {/*=== All Todos  ===*/}
 
           {/* Input + Add Text */}
@@ -77,6 +98,7 @@ export default function TodoList() {
               alignItems="center"
             >
               <Button
+                className="addButton"
                 style={{ width: "100%", height: "100%" }}
                 variant="contained"
               >

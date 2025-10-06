@@ -7,7 +7,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-const Todo = () => {
+const Todo = ({ title, details }) => {
   return (
     <>
       {/* Card */}
@@ -29,14 +29,14 @@ const Todo = () => {
                 component="div"
                 sx={{ textAlign: "right" }}
               >
-                المهمه الاولي
+                {title}
               </Typography>
               <Typography
                 variant="p"
                 component="div"
                 sx={{ textAlign: "right" }}
               >
-                التفاصيل الخاصه بالمهمه الاولي
+                {details}
               </Typography>
             </Grid>
             {/*=== Grid 1 ===*/}
