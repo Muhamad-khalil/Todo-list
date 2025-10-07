@@ -7,9 +7,12 @@ import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-const Todo = ({ Todo, handleCheck }) => {
+const Todo = ({ Todo, handleCheck, handelDelete }) => {
   function handleCheckClick() {
     handleCheck(Todo.id);
+  }
+  function handleDeleteClick() {
+    handelDelete(Todo.id);
   }
 
   return (
@@ -86,6 +89,7 @@ const Todo = ({ Todo, handleCheck }) => {
                   background: "white",
                   border: "solid #b23c17 3px",
                 }}
+                onClick={handleDeleteClick}
               >
                 <DeleteOutlinedIcon />
               </IconButton>
