@@ -7,7 +7,11 @@ import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-const Todo = ({ title, details }) => {
+const Todo = ({ Todo, handleCheck }) => {
+  function handleCheckClick() {
+    handleCheck(Todo.id);
+  }
+
   return (
     <>
       {/* Card */}
@@ -29,14 +33,14 @@ const Todo = ({ title, details }) => {
                 component="div"
                 sx={{ textAlign: "right" }}
               >
-                {title}
+                {Todo.title}
               </Typography>
               <Typography
                 variant="p"
                 component="div"
                 sx={{ textAlign: "right" }}
               >
-                {details}
+                {Todo.details}
               </Typography>
             </Grid>
             {/*=== Grid 1 ===*/}
@@ -47,41 +51,43 @@ const Todo = ({ title, details }) => {
               justifyContent="space-around"
               alignItems="center"
             >
-              <IconButton aria-label="delete" size="small">
-                <CheckIcon
-                  className="iconButton"
-                  fontSize="large"
-                  style={{
-                    color: "#8bc34a",
-                    background: "white",
-                    border: "solid #8bc34a 3px",
-                    borderRadius: "50%",
-                  }}
-                />
+              {/* checkButton */}
+              <IconButton
+                aria-label="delete"
+                className="iconButton"
+                style={{
+                  color: Todo.isCompleted ? "white" : "#8bc34a",
+                  background: Todo.isCompleted ? "#8bc34a" : "white",
+                  border: "solid #8bc34a 3px",
+                }}
+                onClick={() => {
+                  handleCheckClick();
+                }}
+              >
+                <CheckIcon />
               </IconButton>
-              <IconButton aria-label="delete" size="small">
-                <ModeEditOutlinedIcon
-                  className="iconButton"
-                  fontSize="large"
-                  style={{
-                    color: "#1769aa",
-                    background: "white",
-                    border: "solid #1769aa 3px",
-                    borderRadius: "50%",
-                  }}
-                />
+              {/*== checkButton ==*/}
+              <IconButton
+                aria-label="delete"
+                className="iconButton"
+                style={{
+                  color: "#1769aa",
+                  background: "white",
+                  border: "solid #1769aa 3px",
+                }}
+              >
+                <ModeEditOutlinedIcon />
               </IconButton>
-              <IconButton aria-label="delete" size="small">
-                <DeleteOutlinedIcon
-                  className="iconButton"
-                  fontSize="large"
-                  style={{
-                    color: "#b23c17",
-                    background: "white",
-                    border: "solid #b23c17 3px",
-                    borderRadius: "50%",
-                  }}
-                />
+              <IconButton
+                aria-label="delete"
+                className="iconButton"
+                style={{
+                  color: "#b23c17",
+                  background: "white",
+                  border: "solid #b23c17 3px",
+                }}
+              >
+                <DeleteOutlinedIcon />
               </IconButton>
             </Grid>
             {/*=== Grid 2 ===*/}

@@ -39,8 +39,21 @@ export default function TodoList() {
   const [todos, setTodos] = useState(initialTodos); // todoLists
   const [titleInput, setTitleInput] = useState(""); // TextField Input
   const todoJSX = todos.map((t) => {
-    return <Todo title={t.title} details={t.details} key={t.id} />;
+    return <Todo Todo={t} key={t.id} handleCheck={handleCheckCleck} />;
   });
+  function handleCheckCleck(todoId) {
+    const updatedTodo = todos.map((t) => {
+      if (t.id == todoId) {
+        t.isCompleted = !t.isCompleted;
+      }
+      return t;
+    });
+    // const updatedTodo = todos.map((t) => {
+    //   return t.id === todoId ? { ...t, isCompleted: !t.isCompleted } : t;
+    // });
+    setTodos(updatedTodo);
+  }
+  // add text List
   function handleAddClick() {
     const newTodo = {
       id: uuidv4(),
