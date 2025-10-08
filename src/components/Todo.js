@@ -7,12 +7,24 @@ import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-const Todo = ({ Todo, handleCheck, handelDelete }) => {
+import { useContext } from "react";
+import { TodosContext } from "../context/todosContext";
+const Todo = ({ Todo }) => {
+  const { todos, setTodos } = useContext(TodosContext);
   function handleCheckClick() {
-    handleCheck(Todo.id);
+    const updatedTodo = todos.map((t) => {
+      if (t.id == Todo.id) {
+        t.isCompleted = !t.isCompleted;
+      }
+      return t;
+    });
+    setTodos(updatedTodo);
   }
   function handleDeleteClick() {
-    handelDelete(Todo.id);
+    const deleteTodo = todos.filter((t) => {
+      return t.id !== Todo.id;
+    });
+    setTodos(deleteTodo);
   }
 
   return (

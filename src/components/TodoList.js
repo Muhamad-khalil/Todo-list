@@ -14,56 +14,16 @@ import Button from "@mui/material/Button";
 import Todo from "./Todo";
 // other
 import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
-const initialTodos = [
-  {
-    id: uuidv4(),
-    title: "اهلا وسهلا بك",
-    details: "اهلا وسهلا بك في مشروعي الخاص",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "اهلا وسهلا بك",
-    details: "اهلا وسهلا بك في مشروعي الخاص",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "اهلا وسهلا بك",
-    details: "اهلا وسهلا بك في  الخاص",
-    isCompleted: false,
-  },
-];
+import { useContext, useState } from "react";
+import { TodosContext } from "../context/todosContext";
 
 export default function TodoList() {
-  const [todos, setTodos] = useState(initialTodos); // todoLists
+  const { todos, setTodos } = useContext(TodosContext);
   const [titleInput, setTitleInput] = useState(""); // TextField Input
   const todoJSX = todos.map((t) => {
-    return (
-      <Todo
-        Todo={t}
-        key={t.id}
-        handleCheck={handleCheckCleck}
-        handelDelete={handleDeleteCleck}
-      />
-    );
+    return <Todo Todo={t} key={t.id} />;
   });
-  // handleCheckCleck
-  function handleCheckCleck(todoId) {
-    const updatedTodo = todos.map((t) => {
-      if (t.id == todoId) {
-        t.isCompleted = !t.isCompleted;
-      }
-      return t;
-    });
-    setTodos(updatedTodo);
-  }
-  // handleDeleteCleck
-  function handleDeleteCleck(todoId) {
-    const deleteTodo = todos.filter((t) => t.id !== todoId);
-    setTodos(deleteTodo);
-  }
+
   // add text List
   function handleAddClick() {
     const newTodo = {
