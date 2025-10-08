@@ -4,11 +4,13 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 import { TodosContext } from "./context/todosContext";
+// theme fontWight arabic lang
 const theme = createTheme({
   typography: {
     fontFamily: ["Alexandria"],
   },
 });
+// info Todos
 const initialTodos = [
   {
     id: uuidv4(),

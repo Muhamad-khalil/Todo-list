@@ -21,7 +21,7 @@ export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
   const [titleInput, setTitleInput] = useState(""); // TextField Input
   const todoJSX = todos.map((t) => {
-    return <Todo Todo={t} key={t.id} />;
+    return <Todo todo={t} key={t.id} />;
   });
 
   // add text List

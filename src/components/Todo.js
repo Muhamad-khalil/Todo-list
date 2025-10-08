@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -7,13 +7,23 @@ import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+// hooks
 import { useContext } from "react";
 import { TodosContext } from "../context/todosContext";
-const Todo = ({ Todo }) => {
+const Todo = ({ todo }) => {
+  const [showDeleteDialog, setshowDeleteDialog] = useState(false);
   const { todos, setTodos } = useContext(TodosContext);
+  // Event Handlers
   function handleCheckClick() {
     const updatedTodo = todos.map((t) => {
-      if (t.id == Todo.id) {
+      if (t.id == todo.id) {
         t.isCompleted = !t.isCompleted;
       }
       return t;
@@ -21,12 +31,22 @@ const Todo = ({ Todo }) => {
     setTodos(updatedTodo);
   }
   function handleDeleteClick() {
-    const deleteTodo = todos.filter((t) => {
-      return t.id !== Todo.id;
+    const updatedTodo = todos.filter((t) => {
+      return t.id !== todo.id;
     });
-    setTodos(deleteTodo);
+    setTodos(updatedTodo);
   }
 
+  // show Dialog function
+  const handleClickOpen = () => {
+    setshowDeleteDialog(true);
+  };
+
+  const handleClose = () => {
+    setshowDeleteDialog(false);
+  };
+  // ==== show Dialog function ====
+  // Event Handlers
   return (
     <>
       {/* Card */}
@@ -48,14 +68,14 @@ const Todo = ({ Todo }) => {
                 component="div"
                 sx={{ textAlign: "right" }}
               >
-                {Todo.title}
+                {todo.title}
               </Typography>
               <Typography
                 variant="p"
                 component="div"
                 sx={{ textAlign: "right" }}
               >
-                {Todo.details}
+                {todo.details}
               </Typography>
             </Grid>
             {/*=== Grid 1 ===*/}
@@ -93,18 +113,47 @@ const Todo = ({ Todo }) => {
               >
                 <ModeEditOutlinedIcon />
               </IconButton>
-              <IconButton
-                aria-label="delete"
-                className="iconButton"
-                style={{
-                  color: "#b23c17",
-                  background: "white",
-                  border: "solid #b23c17 3px",
-                }}
-                onClick={handleDeleteClick}
-              >
-                <DeleteOutlinedIcon />
-              </IconButton>
+
+              {/* Delele Dialog */}
+              <>
+                {/* delete icon */}
+                <IconButton
+                  aria-label="delete"
+                  className="iconButton"
+                  style={{
+                    color: "#b23c17",
+                    background: "white",
+                    border: "solid #b23c17 3px",
+                  }}
+                  onClick={handleClickOpen}
+                >
+                  <DeleteOutlinedIcon />
+                </IconButton>
+                {/*== delete icon ==*/}
+                <Dialog
+                  style={{ direction: "rtl" }}
+                  onClose={handleClose}
+                  open={showDeleteDialog}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">
+                    "هل انت متاكد من رغبتك في حذف هذا النموزج"
+                  </DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      اذا تم حذف النموذج لا يمكن ارجاعه
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose}>اغلاق</Button>
+                    <Button onClick={handleDeleteClick} autoFocus>
+                      نعم, قم بالحذف
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+              </>
+              {/*=== Delele Dialog ===*/}
             </Grid>
             {/*=== Grid 2 ===*/}
           </Grid>
