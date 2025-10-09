@@ -20,6 +20,7 @@ import { TodosContext } from "../context/todosContext";
 export default function TodoList() {
   const { todos, setTodos } = useContext(TodosContext);
   const [titleInput, setTitleInput] = useState(""); // TextField Input
+  const [detailsInput, setDetailsInput] = useState(""); // TextField Input
   const todoJSX = todos.map((t) => {
     return <Todo todo={t} key={t.id} />;
   });
@@ -29,11 +30,12 @@ export default function TodoList() {
     const newTodo = {
       id: uuidv4(),
       title: titleInput,
-      details: "",
+      details: detailsInput,
       isCompleted: false,
     };
     setTodos([...todos, newTodo]);
     setTitleInput("");
+    setDetailsInput("");
   }
   return (
     <Container maxWidth="sm">
@@ -86,6 +88,16 @@ export default function TodoList() {
                 value={titleInput}
                 onChange={(e) => {
                   setTitleInput(e.target.value);
+                }}
+              />
+              <TextField
+                style={{ width: "100%", marginLeft: "10px" }}
+                id="outlined-basic"
+                label="التفاصيل"
+                variant="outlined"
+                value={detailsInput}
+                onChange={(e) => {
+                  setDetailsInput(e.target.value);
                 }}
               />
             </Grid>
