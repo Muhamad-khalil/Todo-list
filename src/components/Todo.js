@@ -42,8 +42,10 @@ const Todo = ({ todo }) => {
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
 
   // const [showUpdateDialog, setShowUpdateDialog] = useState(false);
-  const [editedTitle, setEditedTitle] = useState(todo.title);
-  const [editedDetails, setEditedDetails] = useState(todo.details);
+  const [updateTodo, setUpdateTodo] = useState({
+    title: todo.title,
+    details: todo.details,
+  });
 
   // Context
   const { todos, setTodos } = useContext(TodosContext);
@@ -69,6 +71,7 @@ const Todo = ({ todo }) => {
       return t;
     });
     setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos)); // strong todos with browser
   }
 
   // ==============================
@@ -78,6 +81,7 @@ const Todo = ({ todo }) => {
     const updatedTodos = todos.filter((t) => t.id !== todo.id);
     setTodos(updatedTodos);
     setShowDeleteDialog(false);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos)); // strong todos with browser
   }
   // ==============================
   // 🗑️ Update todo
@@ -85,13 +89,13 @@ const Todo = ({ todo }) => {
   function handleSaveEdit() {
     const updatedTodos = todos.map((t) => {
       if (t.id == todo.id) {
-        t.title = editedTitle;
-        t.details = editedDetails;
+        return { ...t, title: updateTodo.title, details: updateTodo.details };
       }
       return t;
     });
     setTodos(updatedTodos);
     setShowUpdateDialog(false);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos)); // strong todos with browser
   }
 
   return (
@@ -133,117 +137,143 @@ const Todo = ({ todo }) => {
               alignItems="center"
             >
               {/* ✅✅✅ Check button ✅✅✅*/}
-              <>
-                <IconButton
-                  aria-label="check"
-                  className="iconButton"
-                  style={{
-                    color: todo.isCompleted ? "white" : "#8bc34a",
-                    background: todo.isCompleted ? "#8bc34a" : "white",
-                    border: "solid #8bc34a 3px",
-                  }}
-                  onClick={handleCheckClick}
-                >
-                  <CheckIcon />
-                </IconButton>
-              </>
+              <IconButton
+                aria-label="check"
+                className="iconButton"
+                style={{
+                  color: todo.isCompleted ? "white" : "#8bc34a",
+                  background: todo.isCompleted ? "#8bc34a" : "white",
+                  border: "solid #8bc34a 3px",
+                }}
+                onClick={handleCheckClick}
+              >
+                <CheckIcon />
+              </IconButton>
               {/* ✅✅✅ Check button ✅✅✅*/}
 
-              {/*✏️✏️✏️✏️✏️  update button  ✏️✏️✏️✏️✏️*/}
-              <>
-                <IconButton
-                  aria-label="edit"
-                  className="iconButton"
-                  style={{
-                    color: "#1769aa",
-                    background: "white",
-                    border: "solid #1769aa 3px",
-                  }}
-                  onClick={handleUpdateOpen}
-                >
-                  <ModeEditOutlinedIcon />
-                </IconButton>
-                <Dialog
-                  style={{ direction: "rtl" }}
-                  onClose={handleUpdeteClose}
-                  open={showUpdateDialog}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    هل انت متاكد من تعديل النموذج؟
-                  </DialogTitle>
-                  <DialogContent>
-                    <TextField
-                      margin="dense"
-                      label="عنوان المهمه"
-                      fullWidth
-                      variant="standard"
-                      value={editedTitle}
-                      onChange={(e) => {
-                        setEditedTitle(e.target.value);
-                      }}
-                    />
-                    <TextField
-                      margin="dense"
-                      label="التفاصيل"
-                      fullWidth
-                      variant="standard"
-                      value={editedDetails}
-                      onChange={(e) => {
-                        setEditedDetails(e.target.value);
-                      }}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleUpdeteClose}>اغلاق</Button>
-                    <Button onClick={handleSaveEdit} autoFocus>
-                      نعم, قم بالتعديل
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </>
-              {/*✏️✏️✏️✏️✏️  update button  ✏️✏️✏️✏️✏️*/}
+              {/*✏️✏️✏️  update button  ✏️✏️✏️*/}
+              <IconButton
+                aria-label="edit"
+                className="iconButton"
+                style={{
+                  color: "#1769aa",
+                  background: "white",
+                  border: "solid #1769aa 3px",
+                }}
+                onClick={(e) => {
+                  e.currentTarget.blur();
+                  handleUpdateOpen();
+                }}
+              >
+                <ModeEditOutlinedIcon />
+              </IconButton>
+              {/*✏️✏️✏️  update button  ✏️✏️✏️*/}
 
-              {/* 🗑️🗑️🗑️ Delete Dialog 🗑️🗑️🗑️🗑️*/}
-              <>
-                <IconButton
-                  aria-label="delete"
-                  className="iconButton"
-                  style={{
-                    color: "#b23c17",
-                    background: "white",
-                    border: "solid #b23c17 3px",
-                  }}
-                  onClick={handleDeleteOpen}
-                >
-                  <DeleteOutlinedIcon />
-                </IconButton>
-                {/* ✅ Delete Dialog */}
-                <Dialog
-                  style={{ direction: "rtl" }}
-                  onClose={handleDeleteClose}
-                  open={showDeleteDialog}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">
-                    هل انت متاكد من رغبتك في حذف هذا النموذج؟
-                  </DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      اذا تم حذف النموذج لا يمكن ارجاعه
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleDeleteClose}>اغلاق</Button>
-                    <Button onClick={handleDeleteClick} autoFocus>
-                      نعم, قم بالحذف
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </>
-              {/* 🗑️🗑️🗑️ Delete Dialog 🗑️🗑️🗑️🗑️*/}
+              {/*🗑️🗑️🗑️  delete button  🗑️🗑️🗑️*/}
+              <IconButton
+                aria-label="delete"
+                className="iconButton"
+                style={{
+                  color: "#b23c17",
+                  background: "white",
+                  border: "solid #b23c17 3px",
+                }}
+                onClick={(e) => {
+                  e.currentTarget.blur();
+                  handleDeleteOpen();
+                }}
+              >
+                <DeleteOutlinedIcon />
+              </IconButton>
+              {/*🗑️🗑️🗑️  delete  button  🗑️🗑️🗑️*/}
+
+              {/* ✏️✏️✏️ Update Dialog ✏️✏️✏️*/}
+              <Dialog
+                style={{ direction: "rtl" }}
+                onClose={handleUpdeteClose}
+                open={showUpdateDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  هل انت متاكد من تعديل النموذج؟
+                </DialogTitle>
+                <DialogContent>
+                  <TextField
+                    margin="dense"
+                    label="عنوان المهمه"
+                    fullWidth
+                    variant="standard"
+                    value={updateTodo.title}
+                    onChange={(e) => {
+                      setUpdateTodo({ ...updateTodo, title: e.target.value });
+                    }}
+                  />
+                  <TextField
+                    margin="dense"
+                    label="التفاصيل"
+                    fullWidth
+                    variant="standard"
+                    value={updateTodo.details}
+                    onChange={(e) => {
+                      setUpdateTodo({
+                        ...updateTodo,
+                        details: e.target.value,
+                      });
+                    }}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    style={{ color: "#de5f99" }}
+                    onClick={handleUpdeteClose}
+                  >
+                    اغلاق
+                  </Button>
+                  <Button
+                    style={{ color: "#de5f99" }}
+                    onClick={handleSaveEdit}
+                    autoFocus
+                  >
+                    نعم, قم بالتعديل
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              {/* ✏️✏️✏️ Update Dialog ✏️✏️✏️*/}
+
+              {/* 🗑️🗑️🗑️ Delete Dialog 🗑️🗑️🗑️*/}
+              <Dialog
+                style={{ direction: "rtl" }}
+                onClose={handleDeleteClose}
+                open={showDeleteDialog}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">
+                  هل انت متاكد من رغبتك في حذف هذا النموذج؟
+                </DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    اذا تم حذف النموذج لا يمكن ارجاعه
+                  </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                  <Button
+                    style={{ color: "#de5f99" }}
+                    onClick={handleDeleteClose}
+                  >
+                    اغلاق
+                  </Button>
+                  <Button
+                    style={{ color: "#de5f99" }}
+                    onClick={handleDeleteClick}
+                    autoFocus
+                  >
+                    نعم, قم بالحذف
+                  </Button>
+                </DialogActions>
+              </Dialog>
+              {/* 🗑️🗑️🗑️ Delete Dialog 🗑️🗑️🗑️*/}
             </Grid>
           </Grid>
         </CardContent>
