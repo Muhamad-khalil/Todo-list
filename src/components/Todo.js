@@ -116,7 +116,10 @@ const Todo = ({ todo }) => {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ textAlign: "right" }}
+                sx={{
+                  textAlign: "right",
+                  textDecoration: todo.isCompleted ? "line-through" : "none",
+                }}
               >
                 {todo.title}
               </Typography>
@@ -224,17 +227,8 @@ const Todo = ({ todo }) => {
                   />
                 </DialogContent>
                 <DialogActions>
-                  <Button
-                    style={{ color: "#de5f99" }}
-                    onClick={handleUpdeteClose}
-                  >
-                    اغلاق
-                  </Button>
-                  <Button
-                    style={{ color: "#de5f99" }}
-                    onClick={handleSaveEdit}
-                    autoFocus
-                  >
+                  <Button onClick={handleUpdeteClose}>اغلاق</Button>
+                  <Button onClick={handleSaveEdit} autoFocus>
                     نعم, قم بالتعديل
                   </Button>
                 </DialogActions>
@@ -258,17 +252,8 @@ const Todo = ({ todo }) => {
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                  <Button
-                    style={{ color: "#de5f99" }}
-                    onClick={handleDeleteClose}
-                  >
-                    اغلاق
-                  </Button>
-                  <Button
-                    style={{ color: "#de5f99" }}
-                    onClick={handleDeleteClick}
-                    autoFocus
-                  >
+                  <Button onClick={handleDeleteClose}>اغلاق</Button>
+                  <Button onClick={handleDeleteClick} autoFocus>
                     نعم, قم بالحذف
                   </Button>
                 </DialogActions>

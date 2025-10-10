@@ -9,6 +9,11 @@ const theme = createTheme({
   typography: {
     fontFamily: ["Alexandria"],
   },
+  palette: {
+    primary: {
+      main: "#dd2c00",
+    },
+  },
 });
 // info Todos
 const initialTodos = [

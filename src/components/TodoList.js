@@ -56,8 +56,10 @@ export default function TodoList() {
   // localStorage
 
   // changeDisplayType
-  function changeDisplayType(e) {
-    setDisplayTodoType(e.target.value);
+  function changeDisplayType(e, value) {
+    if (value !== null) {
+      setDisplayTodoType(value);
+    }
   }
 
   // add text List
@@ -77,7 +79,10 @@ export default function TodoList() {
 
   return (
     <Container maxWidth="sm">
-      <Card sx={{ minWidth: 275, textAlign: "center" }}>
+      <Card
+        sx={{ minWidth: 275, textAlign: "center" }}
+        style={{ maxHeight: "80vh", overflow: "scroll" }}
+      >
         <CardContent>
           {/* header */}
           <Typography variant="h2" component="div">
@@ -92,16 +97,19 @@ export default function TodoList() {
             onChange={changeDisplayType}
             aria-label="text alignment"
             sx={{ marginTop: "30px" }}
+            color="primary"
           >
-            <ToggleButton value="All">
-              <Typography variant="h6">الكل</Typography>
-            </ToggleButton>
-            <ToggleButton value="non-completed">
-              <Typography variant="h6">المنجزه</Typography>
-            </ToggleButton>
-            <ToggleButton value="completed">
-              <Typography variant="h6">الغير منجزه</Typography>
-            </ToggleButton>
+            <Typography>
+              <ToggleButton value="All">
+                <Typography variant="h6">الكل</Typography>
+              </ToggleButton>
+              <ToggleButton value="completed">
+                <Typography variant="h6">المنجزه</Typography>
+              </ToggleButton>
+              <ToggleButton value="non-completed">
+                <Typography variant="h6">الغير منجزه</Typography>
+              </ToggleButton>
+            </Typography>
           </ToggleButtonGroup>
           {/*=== ToggleButton  ===*/}
           {/* All Todos  */}
@@ -150,7 +158,7 @@ export default function TodoList() {
                 onClick={() => {
                   handleAddClick();
                 }}
-                disabled={titleInput.length <= 0}
+                disabled={titleInput.length <= 0 && detailsInput.length <= 0}
               >
                 اضافه
               </Button>
