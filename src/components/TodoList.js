@@ -1,172 +1,167 @@
 import * as React from "react";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Grid from "@mui/material/GridLegacy";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { v4 as uuidv4 } from "uuid";
+
+// ICONS
+import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
+import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
+import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
+import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
 
 // Components
 import Todo from "./Todo";
-// other
-import { v4 as uuidv4 } from "uuid";
-import { useContext, useState, useEffect } from "react";
-import { TodosContext } from "../context/todosContext";
+
+// OTHERS
+import { TodosContext } from "../contexts/todosContext";
+import { useContext, useState, useEffect, useMemo } from "react";
 
 export default function TodoList() {
-  const { todos, setTodos } = useContext(TodosContext);
-  const [titleInput, setTitleInput] = useState(""); // TextField Input
-  const [detailsInput, setDetailsInput] = useState(""); // TextField Input
-  const [displayTodoType, setDisplayTodoType] = useState("All"); // TextField Input
+	console.log("re render");
+	const { todos, setTodos } = useContext(TodosContext);
 
-  // filter todo isCompleted or || not isCompleted
-  const CompletedTodo = todos.filter((t) => t.isCompleted === true);
-  const notCompletedTodo = todos.filter((t) => t.isCompleted === false);
+	const [titleInput, setTitleInput] = useState("");
+	const [displayedTodosType, setDisplayedTodosType] = useState("all");
 
-  let todosToBeRender = todos;
-  if (displayTodoType == "completed") {
-    todosToBeRender = CompletedTodo;
-  } else if (displayTodoType == "non-completed") {
-    todosToBeRender = notCompletedTodo;
-  } else {
-    todosToBeRender = todos;
-  }
+	// filteration arrays
 
-  // filter todo isCompleted or || not isCompleted
+	const completedTodos = useMemo(() => {
+		return todos.filter((t) => {
+			console.log("calling completed todos");
+			return t.isCompleted;
+		});
+	}, [todos]);
 
-  const todoJSX = todosToBeRender.map((t) => {
-    return <Todo todo={t} key={t.id} />;
-  });
+	const notCompletedTodos = useMemo(() => {
+		return todos.filter((t) => {
+			console.log("calling not completed todos");
+			return !t.isCompleted;
+		});
+	}, [todos]);
 
-  // localStorage
-  useEffect(() => {
-    // console.log("calling use effect");
-    // const updatedTodos = JSON.parse(localStorage.getItem("todos") || "[]");
-    // setTodos(updatedTodos);
-    const storedTodos = localStorage.getItem("todos");
-    if (storedTodos) {
-      const updatedTodos = JSON.parse(storedTodos);
-      setTodos(updatedTodos);
-    }
-  }, []);
-  // localStorage
+	let todosToBeRendered = todos;
 
-  // changeDisplayType
-  function changeDisplayType(e, value) {
-    if (value !== null) {
-      setDisplayTodoType(value);
-    }
-  }
+	if (displayedTodosType == "completed") {
+		todosToBeRendered = completedTodos;
+	} else if (displayedTodosType == "non-completed") {
+		todosToBeRendered = notCompletedTodos;
+	} else {
+		todosToBeRendered = todos;
+	}
 
-  // add text List
-  function handleAddClick() {
-    const newTodo = {
-      id: uuidv4(),
-      title: titleInput,
-      details: detailsInput,
-      isCompleted: false,
-    };
-    const updatedTodos = [...todos, newTodo];
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos)); // strong todos with browser
-    setTitleInput("");
-    setDetailsInput("");
-  }
+	const todosJsx = todosToBeRendered.map((t) => {
+		return <Todo key={t.id} todo={t} />;
+	});
 
-  return (
-    <Container maxWidth="sm">
-      <Card
-        sx={{ minWidth: 275, textAlign: "center" }}
-        style={{ maxHeight: "80vh", overflow: "scroll" }}
-      >
-        <CardContent>
-          {/* header */}
-          <Typography variant="h2" component="div">
-            مهامي
-          </Typography>
-          <Divider />
-          {/* header */}
-          {/* ToggleButton  */}
-          <ToggleButtonGroup
-            value={displayTodoType}
-            exclusive
-            onChange={changeDisplayType}
-            aria-label="text alignment"
-            sx={{ marginTop: "30px" }}
-            color="primary"
-          >
-            <Typography>
-              <ToggleButton value="All">
-                <Typography variant="h6">الكل</Typography>
-              </ToggleButton>
-              <ToggleButton value="completed">
-                <Typography variant="h6">المنجزه</Typography>
-              </ToggleButton>
-              <ToggleButton value="non-completed">
-                <Typography variant="h6">الغير منجزه</Typography>
-              </ToggleButton>
-            </Typography>
-          </ToggleButtonGroup>
-          {/*=== ToggleButton  ===*/}
-          {/* All Todos  */}
-          {todoJSX}
-          {/*=== All Todos  ===*/}
+	useEffect(() => {
+		console.log("calling use effect");
+		const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
+		setTodos(storageTodos);
+	}, []);
 
-          {/* Input + Add Text */}
-          <Grid container sx={{ marginTop: 5 }}>
-            <Grid
-              xs={8}
-              display="flex"
-              justifyContent="space-around"
-              alignItems="center"
-            >
-              <TextField
-                style={{ width: "100%", marginLeft: "10px" }}
-                id="outlined-basic"
-                label="عنوان المهمه"
-                variant="outlined"
-                value={titleInput}
-                onChange={(e) => {
-                  setTitleInput(e.target.value);
-                }}
-              />
-              <TextField
-                style={{ width: "100%", marginLeft: "10px" }}
-                id="outlined-basic"
-                label="التفاصيل"
-                variant="outlined"
-                value={detailsInput}
-                onChange={(e) => {
-                  setDetailsInput(e.target.value);
-                }}
-              />
-            </Grid>
-            <Grid
-              xs={4}
-              display="flex"
-              justifyContent="space-around"
-              alignItems="center"
-            >
-              <Button
-                className="addButton"
-                style={{ width: "100%", height: "100%" }}
-                variant="contained"
-                onClick={() => {
-                  handleAddClick();
-                }}
-                disabled={titleInput.length <= 0 && detailsInput.length <= 0}
-              >
-                اضافه
-              </Button>
-            </Grid>
-          </Grid>
-          {/*=== Input + Add Text ===*/}
-        </CardContent>
-      </Card>
-    </Container>
-  );
+	function changeDisplayedType(e) {
+		setDisplayedTodosType(e.target.value);
+	}
+	function handleAddClick() {
+		const newTodo = {
+			id: uuidv4(),
+			title: titleInput,
+			details: "",
+			isCompleted: false,
+		};
+
+		const updatedTodos = [...todos, newTodo];
+		setTodos(updatedTodos);
+		localStorage.setItem("todos", JSON.stringify(updatedTodos));
+		setTitleInput("");
+	}
+
+	return (
+		<Container maxWidth="sm">
+			<Card
+				sx={{ minWidth: 275 }}
+				style={{
+					maxHeight: "80vh",
+					overflow: "scroll",
+				}}
+			>
+				<CardContent>
+					<Typography variant="h2" style={{ fontWeight: "bold" }}>
+						مهامي
+					</Typography>
+					<Divider />
+
+					{/* FILTER BUTTONS */}
+					<ToggleButtonGroup
+						style={{ direction: "ltr", marginTop: "30px" }}
+						value={displayedTodosType}
+						exclusive
+						onChange={changeDisplayedType}
+						aria-label="text alignment"
+						color="primary"
+					>
+						<ToggleButton value="non-completed">
+							غير المنجز
+						</ToggleButton>
+						<ToggleButton value="completed">المنجز</ToggleButton>
+						<ToggleButton value="all">الكل</ToggleButton>
+					</ToggleButtonGroup>
+					{/* ==== FILTER BUTTON ==== */}
+
+					{/* ALL TODOS */}
+					{todosJsx}
+					{/* === ALL TODOS === */}
+
+					{/* INPUT + ADD BUTTON */}
+					<Grid container style={{ marginTop: "20px" }} spacing={2}>
+						<Grid
+							xs={8}
+							display="flex"
+							justifyContent="space-around"
+							alignItems="center"
+						>
+							<TextField
+								style={{ width: "100%" }}
+								id="outlined-basic"
+								label="عنوان المهمة"
+								variant="outlined"
+								value={titleInput}
+								onChange={(e) => {
+									setTitleInput(e.target.value);
+								}}
+							/>
+						</Grid>
+
+						<Grid
+							xs={4}
+							display="flex"
+							justifyContent="space-around"
+							alignItems="center"
+						>
+							<Button
+								style={{ width: "100%", height: "100%" }}
+								variant="contained"
+								onClick={() => {
+									handleAddClick();
+								}}
+								disabled={titleInput.length == 0}
+							>
+								إضافة
+							</Button>
+						</Grid>
+					</Grid>
+					{/*== INPUT + ADD BUTTON ==*/}
+				</CardContent>
+			</Card>
+		</Container>
+	);
 }
