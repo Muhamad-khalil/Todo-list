@@ -30,12 +30,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 // OTHERS
 import { TodosContext } from "../contexts/todosContext";
+import { ToastContext } from "../contexts/ToastContext";
 import { useContext, useState, useEffect, useMemo } from "react";
 
 export default function TodoList() {
   console.log("re render");
   const { todos, setTodos } = useContext(TodosContext);
-
+  const { showHideToast } = useContext(ToastContext);
   const [dialogTodo, setDialogTodo] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
@@ -93,6 +94,7 @@ export default function TodoList() {
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setTitleInput("");
     setDetailsInput("");
+    showHideToast("تمت الاضافه بنجاح");
   }
 
   // Delete handler
@@ -117,6 +119,7 @@ export default function TodoList() {
     setTodos(updatedTodos);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setShowDeleteDialog(false);
+    showHideToast("تم الحذف بنجاح");
   }
 
   // delete handler
@@ -136,6 +139,7 @@ export default function TodoList() {
     setTodos(updatedTodos);
     setShowUpdateDialog(false);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    showHideToast("تم التعديل بنجاح");
   }
   const todosJsx = todosToBeRendered.map((t) => {
     return (
@@ -259,7 +263,11 @@ export default function TodoList() {
             {/* === ALL TODOS === */}
 
             {/* INPUT + ADD BUTTON */}
-            <Grid container style={{ marginTop: "20px", width:"100%"}} spacing={2}>
+            <Grid
+              container
+              style={{ marginTop: "20px", width: "100%" }}
+              spacing={2}
+            >
               <Grid
                 xs={4}
                 display="flex"

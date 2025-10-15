@@ -1,10 +1,7 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/GridLegacy";
-import TextField from "@mui/material/TextField";
 
 // ICONS
 import CheckIcon from "@mui/icons-material/Check";
@@ -14,13 +11,9 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 
 import { useContext, useState } from "react";
 import { TodosContext } from "../contexts/todosContext";
+import { ToastContext } from "../contexts/ToastContext";
 
-// DIALOG IMPORTS
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+//  showHideToast
 
 export default function Todo({ todo, showDelete, showUpdate }) {
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
@@ -29,6 +22,8 @@ export default function Todo({ todo, showDelete, showUpdate }) {
     details: todo.details,
   });
   const { todos, setTodos } = useContext(TodosContext);
+  // eslint-disable-next-line no-unused-vars
+  const { showHideToast } = useContext(ToastContext);
 
   // EVENT HANDLERS
   function handleCheckClick() {
@@ -40,6 +35,8 @@ export default function Todo({ todo, showDelete, showUpdate }) {
     });
     setTodos(updatedTodos);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    // eslint-disable-next-line no-const-assign
+    showHideToast("تم التعديل بنجاح");
   }
 
   function handleDeleteClick() {
