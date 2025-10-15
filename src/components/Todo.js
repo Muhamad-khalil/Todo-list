@@ -63,7 +63,7 @@ export default function Todo({ todo, showDelete, showUpdate }) {
         }}
       >
         <CardContent>
-          <Grid container spacing={1}>
+          <Grid container>
             <Grid xs={8}>
               <Typography
                 variant="h5"

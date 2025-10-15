@@ -259,7 +259,7 @@ export default function TodoList() {
             {/* === ALL TODOS === */}
 
             {/* INPUT + ADD BUTTON */}
-            <Grid container style={{ marginTop: "20px" }} spacing={2}>
+            <Grid container style={{ marginTop: "20px", width:"100%"}} spacing={2}>
               <Grid
                 xs={4}
                 display="flex"
