@@ -1,7 +1,5 @@
-import * as React from "react";
 import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -12,11 +10,7 @@ import Grid from "@mui/material/GridLegacy";
 import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
 
-// ICONS
-import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
-import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
-import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
+
 
 // Components
 import Todo from "./Todo";
@@ -63,9 +57,9 @@ export default function TodoList() {
 
   let todosToBeRendered = todos;
 
-  if (displayedTodosType == "completed") {
+  if (displayedTodosType === "completed") {
     todosToBeRendered = completedTodos;
-  } else if (displayedTodosType == "non-completed") {
+  } else if (displayedTodosType === "non-completed") {
     todosToBeRendered = notCompletedTodos;
   } else {
     todosToBeRendered = todos;
@@ -75,7 +69,7 @@ export default function TodoList() {
     console.log("calling use effect");
     const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
     setTodos(storageTodos);
-  }, []);
+  });
 
   // handlers
   function changeDisplayedType(e) {
@@ -114,7 +108,7 @@ export default function TodoList() {
 
   function handleDeleteConfirm() {
     const updatedTodos = todos.filter((t) => {
-      return t.id != dialogTodo.id;
+      return t.id !== dialogTodo.id;
     });
     setTodos(updatedTodos);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
@@ -129,7 +123,7 @@ export default function TodoList() {
 
   function handleUpdateConfirm() {
     const updatedTodos = todos.map((t) => {
-      if (t.id == dialogTodo.id) {
+      if (t.id === dialogTodo.id) {
         return { ...t, title: dialogTodo.title, details: dialogTodo.details };
       } else {
         return t;
@@ -319,7 +313,7 @@ export default function TodoList() {
                   onClick={() => {
                     handleAddClick();
                   }}
-                  disabled={titleInput.length == 0 && detailsInput.length == 0}
+                  disabled={titleInput.length === 0 && detailsInput.length === 0}
                 >
                   إضافة
                 </Button>
