@@ -1,6 +1,7 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useContext } from "react";
+
 import MySnackBar from "../components/MySnackBar";
-export const ToastContext = createContext({});
+const ToastContext = createContext({});
 
 export const ToastProvider = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -19,4 +20,8 @@ export const ToastProvider = ({ children }) => {
       {children}
     </ToastContext.Provider>
   );
+};
+
+export const useToast = () => {
+  return useContext(ToastContext);
 };

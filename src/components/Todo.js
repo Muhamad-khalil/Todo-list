@@ -11,7 +11,7 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 
 import { useContext, useState } from "react";
 import { TodosContext } from "../contexts/todosContext";
-import { ToastContext } from "../contexts/ToastContext";
+import { useToast } from "../contexts/ToastContext";
 
 //  showHideToast
 
@@ -23,7 +23,7 @@ export default function Todo({ todo, showDelete, showUpdate }) {
   });
   const { todos, setTodos } = useContext(TodosContext);
   // eslint-disable-next-line no-unused-vars
-  const { showHideToast } = useContext(ToastContext);
+  const { showHideToast } = useToast();
 
   // EVENT HANDLERS
   function handleCheckClick() {
