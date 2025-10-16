@@ -2,11 +2,10 @@ import "./App.css";
 import TodoList from "./components/TodoList";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { TodosContext } from "./contexts/todosContext";
+import { ToastProvider } from "./contexts/ToastContext";
 import { useState } from "react";
 
 import { v4 as uuidv4 } from "uuid";
-import MySnackBar from "./components/MySnackBar";
-import { ToastContext } from "./contexts/ToastContext";
 const theme = createTheme({
   typography: {
     fontFamily: ["Alexandria"],
@@ -26,35 +25,15 @@ const initialTodos = [
     details: "تيسمبتيس يتسبميتس بيمستب",
     isCompleted: false,
   },
-  {
-    id: uuidv4(),
-    title: "قراءة كتاب",
-    details: "تيسمبتيس يتسبميتس بيمستب",
-    isCompleted: false,
-  },
-  {
-    id: uuidv4(),
-    title: "قراءة كتاب",
-    details: "تيسمبتيس يتسبميتس بيمستب",
-    isCompleted: false,
-  },
 ];
 
 function App() {
   const [todos, setTodos] = useState(initialTodos);
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("");
 
-  function showHideToast(message) {
-    setOpen(true);
-    setMessage(message);
-    setTimeout(() => {
-      setOpen(false);
-    }, 2000);
-  }
+
   return (
     <ThemeProvider theme={theme}>
-      <ToastContext.Provider value={{ showHideToast }}>
+      <ToastProvider>
         <div
           className="App"
           style={{
@@ -66,13 +45,11 @@ function App() {
             direction: "rtl",
           }}
         >
-          <MySnackBar open={open} message={message} />
-
           <TodosContext.Provider value={{ todos, setTodos }}>
             <TodoList />
           </TodosContext.Provider>
         </div>
-      </ToastContext.Provider>
+      </ToastProvider>
     </ThemeProvider>
   );
 }
