@@ -10,8 +10,6 @@ import Grid from "@mui/material/GridLegacy";
 import TextField from "@mui/material/TextField";
 import { v4 as uuidv4 } from "uuid";
 
-
-
 // Components
 import Todo from "./Todo";
 
@@ -25,11 +23,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 // OTHERS
 import { TodosContext } from "../contexts/todosContext";
 import { useToast } from "../contexts/ToastContext";
-import { useContext, useState, useEffect, useMemo } from "react";
+import { useContext, useState, useEffect, useMemo, useReducer } from "react";
+import todosReducer from "../Reducer/todosReducer";
+import { type } from "@testing-library/user-event/dist/type";
 
 export default function TodoList() {
   console.log("re render");
-  const { todos, setTodos } = useContext(TodosContext);
+  const { todos2, setTodos } = useContext(TodosContext);
+
+  const [todos, dispatch] = useReducer(todosReducer, []);
+
   const { showHideToast } = useToast();
   const [dialogTodo, setDialogTodo] = useState(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -75,17 +78,15 @@ export default function TodoList() {
   function changeDisplayedType(e) {
     setDisplayedTodosType(e.target.value);
   }
-  function handleAddClick() {
-    const newTodo = {
-      id: uuidv4(),
-      title: titleInput,
-      details: detailsInput,
-      isCompleted: false,
-    };
 
-    const updatedTodos = [...todos, newTodo];
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  function handleAddClick() {
+    dispatch({
+      type: "added",
+      payload: {
+        newTitle: titleInput,
+        newDetails: detailsInput,
+      },
+    });
     setTitleInput("");
     setDetailsInput("");
     showHideToast("تمت الاضافه بنجاح");
@@ -313,7 +314,9 @@ export default function TodoList() {
                   onClick={() => {
                     handleAddClick();
                   }}
-                  disabled={titleInput.length === 0 && detailsInput.length === 0}
+                  disabled={
+                    titleInput.length === 0 && detailsInput.length === 0
+                  }
                 >
                   إضافة
                 </Button>
