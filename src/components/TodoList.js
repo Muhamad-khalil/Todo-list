@@ -8,7 +8,6 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Grid from "@mui/material/GridLegacy";
 import TextField from "@mui/material/TextField";
-import { v4 as uuidv4 } from "uuid";
 
 // Components
 import Todo from "./Todo";
@@ -25,7 +24,6 @@ import { TodosContext } from "../contexts/todosContext";
 import { useToast } from "../contexts/ToastContext";
 import { useContext, useState, useEffect, useMemo, useReducer } from "react";
 import todosReducer from "../Reducer/todosReducer";
-import { type } from "@testing-library/user-event/dist/type";
 
 export default function TodoList() {
   console.log("re render");
@@ -59,7 +57,6 @@ export default function TodoList() {
   }, [todos]);
 
   let todosToBeRendered = todos;
-
   if (displayedTodosType === "completed") {
     todosToBeRendered = completedTodos;
   } else if (displayedTodosType === "non-completed") {
@@ -69,9 +66,9 @@ export default function TodoList() {
   }
 
   useEffect(() => {
-    console.log("calling use effect");
-    const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
-    setTodos(storageTodos);
+    dispatch({
+      type: "get",
+    });
   });
 
   // handlers
@@ -108,11 +105,10 @@ export default function TodoList() {
   }
 
   function handleDeleteConfirm() {
-    const updatedTodos = todos.filter((t) => {
-      return t.id !== dialogTodo.id;
+    dispatch({
+      type: "deleted",
+      payload: dialogTodo,
     });
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setShowDeleteDialog(false);
     showHideToast("تم الحذف بنجاح");
   }
@@ -123,17 +119,11 @@ export default function TodoList() {
   }
 
   function handleUpdateConfirm() {
-    const updatedTodos = todos.map((t) => {
-      if (t.id === dialogTodo.id) {
-        return { ...t, title: dialogTodo.title, details: dialogTodo.details };
-      } else {
-        return t;
-      }
+    dispatch({
+      type: "updated",
+      payload: dialogTodo,
     });
-
-    setTodos(updatedTodos);
     setShowUpdateDialog(false);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     showHideToast("تم التعديل بنجاح");
   }
   const todosJsx = todosToBeRendered.map((t) => {
