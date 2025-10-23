@@ -42,12 +42,25 @@ const reducer = (currentTodos, action) => {
       const storageTodos = JSON.parse(localStorage.getItem("todos")) ?? [];
       return storageTodos;
     }
+    case "Completed": {
+      const updatedTodos = currentTodos.map((t) => {
+        if (t.id === action.payload.id) {
+          const updatedTodo = {
+            ...t,
+            isCompleted: !t.isCompleted,
+          };
+          return updatedTodo;
+        }
+        return t;
+      });
+      localStorage.setItem("todos", JSON.stringify(updatedTodos));
+      return updatedTodos;
+    }
 
     default: {
       throw Error("Unknown Action " + action.type);
     }
   }
-  return [];
 };
 
 export default reducer;

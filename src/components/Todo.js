@@ -9,28 +9,22 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 
-import { useContext } from "react";
-import { TodosContext } from "../contexts/todosContext";
 import { useToast } from "../contexts/ToastContext";
+import { useTodos } from "../contexts/todosContext";
 
 //  showHideToast
 
 export default function Todo({ todo, showDelete, showUpdate }) {
-  const { todos, setTodos } = useContext(TodosContext);
-  // eslint-disable-next-line no-unused-vars
+  const {  dispatch } = useTodos();
+
   const { showHideToast } = useToast();
 
   // EVENT HANDLERS
   function handleCheckClick() {
-    const updatedTodos = todos.map((t) => {
-      if (t.id === todo.id) {
-        t.isCompleted = !t.isCompleted;
-      }
-      return t;
+    dispatch({
+      type: "Completed",
+      payload: { id: todo.id },
     });
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
-    // eslint-disable-next-line no-const-assign
     showHideToast("تم التعديل بنجاح");
   }
 

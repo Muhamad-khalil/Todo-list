@@ -1,20 +1,17 @@
-import { createContext, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { createContext, useReducer, useContext } from "react";
+import todosReducer from "../Reducer/todosReducer";
+
 export const TodosContext = createContext([]);
 
 export const TodoProvider = ({ children }) => {
-  const initialTodos = [
-    {
-      id: uuidv4(),
-      title: "قراءة كتاب",
-      details: "تيسمبتيس يتسبميتس بيمستب",
-      isCompleted: false,
-    },
-  ];
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, todosDispatch] = useReducer(todosReducer, []);
   return (
-    <TodosContext.Provider value={{ todos, setTodos }}>
+    <TodosContext.Provider value={{ todos: todos, dispatch: todosDispatch }}>
       {children}
     </TodosContext.Provider>
   );
+};
+
+export const useTodos = () => {
+  return useContext(TodosContext);
 };

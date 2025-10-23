@@ -18,23 +18,23 @@ const theme = createTheme({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <ToastProvider>
-        <div
-          className="App"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            background: "#191b1f",
-            height: "100vh",
-            direction: "rtl",
-          }}
-        >
-          <TodoProvider>
+      <TodoProvider>
+        <ToastProvider>
+          <div
+            className="App"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              background: "#191b1f",
+              height: "100vh",
+              direction: "rtl",
+            }}
+          >
             <TodoList />
-          </TodoProvider>
-        </div>
-      </ToastProvider>
+          </div>
+        </ToastProvider>
+      </TodoProvider>
     </ThemeProvider>
   );
 }
